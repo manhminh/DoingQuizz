@@ -1,4 +1,20 @@
 .login-container {
+    .loader-icon {
+        margin-right: 7px;
+        margin-bottom: 2px;
+        animation: spin 1s infinite linear;
+    }
+
+    
+    @keyframes spin {
+        from {
+            transform: scale(1) rotate(0deg);
+        }
+        to {
+            transform: scale(1) rotate(360deg);
+        }
+    }
+
     .header {
         height: 45px;
         padding:  5px 100px 0 100px;
@@ -44,6 +60,12 @@
             border: none;
             color: white;
             background: black;
+
+            &:disabled {
+                background: #dddddd;
+                color: #afafaf;
+                cursor: no-drop;
+            }
         }
 
         .forgot-password {
@@ -51,6 +73,7 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        
 
         .back {
             cursor: pointer;

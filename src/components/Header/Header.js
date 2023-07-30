@@ -14,7 +14,6 @@ const Header = () => {
     const handleRegister = () => {
         navigate('/register')
     }
-    const account = useSelector(state => state.user.account);
     const isAuthenticated = useSelector(state => state.user.isAuthenticated);
 
     return (

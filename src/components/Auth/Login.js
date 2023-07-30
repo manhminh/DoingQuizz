@@ -5,12 +5,14 @@ import { postLogin } from "../../services/apiServices";
 import { toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userAction";
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
 
     const validateEmail = (email) => {
         return String(email)
@@ -32,15 +34,18 @@ const Login = () => {
             toast.error('Invalid password')
             return;
         }
+        setIsLoading(true);
         //submit api
         let data = await postLogin(email, password);
 
         if (data && data.EC === 0) {
             dispatch(doLogin(data))
             toast.success(data.EM);
+            setIsLoading(false);
             navigate('/');
         } else {
             toast.error(data.EM)
+            setIsLoading(false);
         }
     }
 
@@ -85,8 +90,10 @@ const Login = () => {
                     <button
                         className="btn-submit"
                         onClick={() => hanldeLogin()}
+                        disabled={isLoading}
                     >
-                        Login to Typeform
+                        {isLoading && <AiOutlineLoading3Quarters className="loader-icon" />}
+                        <span>Login to Typeform</span>
                     </button>
                 </div>
 
