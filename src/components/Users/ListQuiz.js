@@ -28,7 +28,12 @@ const ListQuiz = () => {
                                 <h5 className="card-title">{`Quiz ${index + 1}`}</h5>
                                 <p className="card-text">{quiz.description}</p>
                                 <span>
-                                    <a className="btn btn-primary" onClick={() => navigate(`/quiz/${quiz.id}`)}>Start now</a>
+                                    <a
+                                        className="btn btn-primary"
+                                        onClick={() => navigate(`/quiz/${quiz.id}`, { state: { quizTitle: quiz.description } })}
+                                    >
+                                        Start now
+                                    </a>
                                 </span>
                             </div>
                         </div>
