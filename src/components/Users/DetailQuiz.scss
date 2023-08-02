@@ -1,7 +1,7 @@
 .detail-quiz-container {
     display: flex;
     gap: 20px;
-    padding: 50pxq;
+    padding: 50px;
     .left-content {
         border: 1px solid red;
         width: 70%;
@@ -11,6 +11,14 @@
         }
 
         .q-content {
+            .q-image {
+                margin-bottom: 26px;
+                img {
+                    width: 300px;
+                    height: 200px;
+                }
+            }
+
             .question {
                 font-size: 20px;
                 font-weight: 600;
