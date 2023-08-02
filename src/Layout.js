@@ -9,6 +9,15 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import { ToastContainer } from 'react-toastify';
 import ListQuiz from "./components/Users/ListQuiz";
+import DetailQuiz from "./components/Users/DetailQuiz";
+
+const NotFound = () => {
+    return (
+        <div className="container mt-3 alert alert-danger">
+            404. Not foudn data with your current URL
+        </div>
+    )
+}
 
 const Layout = () => {
     return (
@@ -16,14 +25,16 @@ const Layout = () => {
             <Routes>
                 <Route path="/" element={<App />}>
                     <Route index element={<HomePage />} />
-                    <Route path="users" element={<ListQuiz />} />
+                    <Route path="/users" element={<ListQuiz />} />
                 </Route>
+                <Route path="/quiz/:id" element={<DetailQuiz />} />
                 <Route path="/admin" element={<Admin />} >
                     <Route index element={<DashBoard />} />
                     <Route path="manage-users" element={<ManageUser />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="*" element={<NotFound />}></Route>
             </Routes>
 
             <ToastContainer

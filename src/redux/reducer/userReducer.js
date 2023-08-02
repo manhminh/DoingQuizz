@@ -1,5 +1,5 @@
 import { FETCH_USER_LOGIN_SUCCESS } from '../action/userAction';
-import { INCREMENT, DECREMENT } from '../action/counterAction';
+import { DECREMENT } from '../action/counterAction';
 const INITIAL_STATE = {
     account: {
         access_token: '',
