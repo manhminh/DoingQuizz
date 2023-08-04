@@ -2,17 +2,25 @@ import _ from "lodash";
 
 const Question = (props) => {
     const { data, index } = props
-    console.log('check data:', data);
     if (_.isEmpty(data)) {
         return (
             <></>
         )
     }
+
+    const handleHandleCheckbox = (e, aId, qId) => {
+        props.handleCheckbox(aId, qId);
+    }
+
+    console.log('>>>check data: ', data);
     return (
         <>
-            {data && data.image &&
-                <div className="q-image">
+            {data && data.image
+                ? <div className="q-image">
                     <img src={`data:image/jpeg;base64,${data.image}`} />
+                </div>
+
+                : <div className="q-image">
                 </div>
             }
             <div className="question">
@@ -21,12 +29,15 @@ const Question = (props) => {
             <div className="answer">
                 {data.answers && data.answers.length > 0 &&
                     data.answers.map((a, index) => {
-                        console.log(a);
                         return (
-
                             <div key={`answer-${index}`} className="a-child">
                                 <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" value="" />
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={a.isSelected}
+                                        onChange={(e) => handleHandleCheckbox(e, a.id, data.questionId)}
+                                    />
                                     <label className="form-check-label">
                                         {a.description}
                                     </label>
