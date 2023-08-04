@@ -12,7 +12,6 @@ const Question = (props) => {
         props.handleCheckbox(aId, qId);
     }
 
-    console.log('>>>check data: ', data);
     return (
         <>
             {data && data.image
