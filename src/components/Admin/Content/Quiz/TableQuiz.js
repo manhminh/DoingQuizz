@@ -5,22 +5,11 @@ import ModalDeleteQuiz from "./ModalDeleteQuiz";
 import ModalUpdateQuiz from "./ModalUpdateQuiz";
 
 const TableQuiz = (props) => {
-    const [listQuiz, setListQuiz] = useState([]);
+    const { listQuiz, fetchListQuiz } = props
     const [showModalDeleteQuiz, setShowModalDeleteQuiz] = useState(false);
     const [showModalUpdateQUiz, setShowModalUpdateQUiz] = useState(false);
     const [dataDelete, setDataDelete] = useState({});
     const [dataUpdate, setDataUpdate] = useState({});
-
-    useEffect(() => {
-        fetchListQuiz();
-    }, [])
-
-    const fetchListQuiz = async () => {
-        let res = await getAllQuizForAdmin();
-        if (res && res.EC === 0) {
-            setListQuiz(res.DT);
-        }
-    }
 
     const handleDeleteQuiz = (quiz) => {
         setDataDelete(quiz);
