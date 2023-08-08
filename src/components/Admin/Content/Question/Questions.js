@@ -1,6 +1,7 @@
-import Select from 'react-select';
 import "./Questions.scss";
+import Select from 'react-select';
 import _ from "lodash"
+import Lightbox from "react-awesome-lightbox";
 import { useState } from 'react';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle, AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 import { RiImageAddFill } from "react-icons/ri";
@@ -14,7 +15,6 @@ const Questions = (props) => {
     ];
 
     const [seletedQuiz, setSeletedQuiz] = useState({});
-
     const [questions, setQuestions] = useState(
         [
             {
@@ -32,6 +32,11 @@ const Questions = (props) => {
             },
         ]
     );
+    const [isPreviewImage, setIsPreviewImage] = useState(false);
+    const [imagePreview, setImagePreview] = useState({
+        url: '',
+        title: ''
+    })
 
     const handleAddReomveQuestion = (type, questionId) => {
         let questionsClone = _.cloneDeep(questions);
@@ -79,6 +84,10 @@ const Questions = (props) => {
         }
     }
 
+    const handleSubmitQuestionForQUiz = () => {
+        console.log('questions: ', questions);
+    }
+
     const handleOnChangeQuestion = (type, questionId, event) => {
         let questionClone = _.cloneDeep(questions);
         let index = questionClone.findIndex(item => item.id === questionId);
@@ -113,6 +122,18 @@ const Questions = (props) => {
                 return answer;
             })
             setQuestions(questionClone);
+        }
+    }
+
+    const handleChangeImagePreview = (questionId) => {
+        let questionClone = _.cloneDeep(questions);
+        let index = questionClone.findIndex(item => item.id === questionId);
+        if (index > -1) {
+            setImagePreview({
+                url: questionClone[index].imageFile,
+                title: questionClone[index].imageName
+            })
+            setIsPreviewImage(true);
         }
     }
 
@@ -160,7 +181,13 @@ const Questions = (props) => {
                                             onChange={(event) => handleOnChangeQuestion('FILE', question.id, event)}
                                         />
                                         <span>
-                                            {question.imageName ? question.imageName : '0 file is uploaded'}
+                                            {question.imageName
+                                                ? <span
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => handleChangeImagePreview(question.id)}>
+                                                    {question.imageName}
+                                                </span>
+                                                : '0 file is uploaded'}
                                         </span>
                                     </div>
                                     <div className='btn-add'>
@@ -209,9 +236,23 @@ const Questions = (props) => {
                                         )
                                     })
                                 }
+                                {
+                                    isPreviewImage === true &&
+                                    <Lightbox
+                                        image={URL.createObjectURL(imagePreview.url)}
+                                        title={imagePreview.title}
+                                        onClose={() => setIsPreviewImage(false)}>
+                                    </Lightbox>
+                                }
                             </div>
                         )
                     })
+                }
+
+                {questions && questions.length > 0 &&
+                    <div>
+                        <button onClick={() => handleSubmitQuestionForQUiz()} className='btn btn-warning'>Save Questions</button>
+                    </div>
                 }
             </div>
         </div>
