@@ -19,13 +19,13 @@ const Questions = (props) => {
         [
             {
                 id: uuidv4(),
-                description: 'question 1',
-                imgageFile: '',
-                imgageName: '',
+                description: '',
+                imageFile: '',
+                imageName: '',
                 answers: [
                     {
                         id: uuidv4(),
-                        description: 'answer 1',
+                        description: '',
                         isCorrect: false
                     },
                 ],
@@ -38,13 +38,13 @@ const Questions = (props) => {
         if (type === 'ADD') {
             let newQuestion = {
                 id: uuidv4(),
-                description: 'question 1',
-                imgageFile: '',
-                imgageName: '',
+                description: '',
+                imageFile: '',
+                imageName: '',
                 answers: [
                     {
                         id: uuidv4(),
-                        description: 'answer 1',
+                        description: '',
                         isCorrect: false
                     },
                 ],
@@ -61,22 +61,60 @@ const Questions = (props) => {
     const handleAddRemoveAnswer = (type, questionId, answerId) => {
         let questionClone = _.cloneDeep(questions);
         let index = questionClone.findIndex(item => item.id === questionId);
-        if (type === 'ADD') {
-            let newAnswer = {
-                id: uuidv4(),
-                description: 'answer 1',
-                isCorrect: false
+        if (index > - 1) {
+            if (type === 'ADD') {
+                let newAnswer = {
+                    id: uuidv4(),
+                    description: '',
+                    isCorrect: false
+                }
+                questionClone[index].answers = [...questionClone[index].answers, newAnswer];
+                setQuestions(questionClone);
             }
-            questionClone[index].answers = [...questionClone[index].answers, newAnswer];
-            setQuestions(questionClone);
-        }
 
-        if (type === 'REMOVE') {
-            questionClone[index].answers = questionClone[index].answers.filter(item => item.id !== answerId);
-            setQuestions(questionClone);
+            if (type === 'REMOVE') {
+                questionClone[index].answers = questionClone[index].answers.filter(item => item.id !== answerId);
+                setQuestions(questionClone);
+            }
         }
     }
 
+    const handleOnChangeQuestion = (type, questionId, event) => {
+        let questionClone = _.cloneDeep(questions);
+        let index = questionClone.findIndex(item => item.id === questionId);
+        if (index > -1) {
+            if (type === 'DESCRIPTION') {
+                questionClone[index].description = event.target.value;
+                setQuestions(questionClone);
+            }
+
+            if (type === 'FILE' && event.target.files && event.target.files[0]) {
+                questionClone[index].imageFile = event.target.files[0];
+                questionClone[index].imageName = event.target.files[0].name;
+                setQuestions(questionClone);
+            }
+        }
+    }
+
+    const handleOnChangeAnswer = (type, questionId, answerId, event) => {
+        let questionClone = _.cloneDeep(questions);
+        let index = questionClone.findIndex(item => item.id === questionId);
+        if (index > -1) {
+            questionClone[index].answers = questionClone[index].answers.map(answer => {
+                if (answer.id === answerId) {
+                    if (type === 'CHECKBOX') {
+                        answer.isCorrect = event.target.checked;
+                    }
+
+                    if (type === 'INPUT') {
+                        answer.description = event.target.value;
+                    }
+                }
+                return answer;
+            })
+            setQuestions(questionClone);
+        }
+    }
 
     return (
         <div className="questions-container">
@@ -107,15 +145,23 @@ const Questions = (props) => {
                                             className="form-control"
                                             placeholder='name@example.com'
                                             value={question.description}
+                                            onChange={(event) => handleOnChangeQuestion('DESCRIPTION', question.id, event)}
                                         />
                                         <label >Question {index + 1} 's description</label>
                                     </div>
                                     <div className='group-upload'>
-                                        <label >
+                                        <label htmlFor={`${question.id}`}>
                                             <RiImageAddFill className='label-upload' />
                                         </label>
-                                        <input type='file' hidden />
-                                        <span>0 file is uploaded</span>
+                                        <input
+                                            id={`${question.id}`}
+                                            type='file'
+                                            hidden
+                                            onChange={(event) => handleOnChangeQuestion('FILE', question.id, event)}
+                                        />
+                                        <span>
+                                            {question.imageName ? question.imageName : '0 file is uploaded'}
+                                        </span>
                                     </div>
                                     <div className='btn-add'>
                                         <span onClick={() => handleAddReomveQuestion('ADD')}>
@@ -136,6 +182,7 @@ const Questions = (props) => {
                                                 <input
                                                     className="form-check-input iscorrect"
                                                     type="checkbox"
+                                                    onChange={(event) => handleOnChangeAnswer('CHECKBOX', question.id, answer.id, event)}
                                                 />
                                                 <div className="form-floating answer-name">
                                                     <input
@@ -143,6 +190,7 @@ const Questions = (props) => {
                                                         className="form-control"
                                                         placeholder='name@example.com'
                                                         value={answer.description}
+                                                        onChange={(event) => handleOnChangeAnswer('INPUT', question.id, answer.id, event)}
                                                     />
                                                     <label >Answer {index + 1}</label>
                                                 </div>
