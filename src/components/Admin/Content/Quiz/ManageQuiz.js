@@ -6,6 +6,8 @@ import TableQuiz from "./TableQuiz";
 import Accordion from 'react-bootstrap/Accordion';
 import Select from 'react-select';
 import "./ManageQuiz.scss";
+import QuizQA from "./QuizzQA";
+import AssignQuiz from "./AssignQuiz";
 
 const ManageQuiz = (props) => {
     const imageInputRef = useRef(null);
@@ -107,15 +109,29 @@ const ManageQuiz = (props) => {
                                 </div>
                             </fieldset>
                         </div>
+                        <div className="list-detail">
+                            <TableQuiz
+                                listQuiz={listQuiz}
+                                fetchListQuiz={fetchListQuiz}
+                            />
+                        </div>
+                    </Accordion.Body>
+                </Accordion.Item>
+
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>Update Q/A Quizzes</Accordion.Header>
+                    <Accordion.Body>
+                        <QuizQA />
+                    </Accordion.Body>
+                </Accordion.Item>
+
+                <Accordion.Item eventKey="2">
+                    <Accordion.Header>Assign to Users</Accordion.Header>
+                    <Accordion.Body>
+                        <AssignQuiz />
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-            <div className="list-detail">
-                <TableQuiz
-                    listQuiz={listQuiz}
-                    fetchListQuiz={fetchListQuiz}
-                />
-            </div>
         </div>
     )
 }

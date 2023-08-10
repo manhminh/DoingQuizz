@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { useState } from "react"
-import { getAllQuizForAdmin } from "../../../../services/apiServices";
 import ModalDeleteQuiz from "./ModalDeleteQuiz";
 import ModalUpdateQuiz from "./ModalUpdateQuiz";
 

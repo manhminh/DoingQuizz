@@ -1,4 +1,4 @@
-import "./Questions.scss";
+import "./QuizQA.scss";
 import Select from 'react-select';
 import _ from "lodash"
 import Lightbox from "react-awesome-lightbox";
@@ -10,7 +10,7 @@ import { getAllQuizForAdmin, postCreateNewQuestionForQuiz, postCreateNewAnswerFo
 import { toast } from "react-toastify";
 
 
-const Questions = (props) => {
+const QuizQA = (props) => {
     const [seletedQuiz, setSeletedQuiz] = useState({});
     const intitQuestions = [
         {
@@ -194,9 +194,6 @@ const Questions = (props) => {
 
     return (
         <div className="questions-container">
-            <div className="title">
-                Manage Question
-            </div>
             <div className="add-new-question">
                 <div className='col-6 form-group'>
                     <label>Select Quiz:</label>
@@ -314,4 +311,4 @@ const Questions = (props) => {
     )
 }
 
-export default Questions
+export default QuizQA;
