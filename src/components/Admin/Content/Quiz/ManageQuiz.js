@@ -40,7 +40,6 @@ const ManageQuiz = (props) => {
             setImage(e.target.files[0]);
         }
     }
-
     const handleSubmitQuiz = async () => {
         if (!name || !description) {
             toast.error('Name/Description is required')

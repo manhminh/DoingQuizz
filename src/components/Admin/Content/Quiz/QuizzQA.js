@@ -6,12 +6,11 @@ import { useState, useEffect } from 'react';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle, AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 import { RiImageAddFill } from "react-icons/ri";
 import { v4 as uuidv4 } from 'uuid';
-import { getAllQuizForAdmin, postCreateNewQuestionForQuiz, postCreateNewAnswerForQuestion } from "../../../../services/apiServices";
+import { getAllQuizForAdmin, postCreateNewQuestionForQuiz, postCreateNewAnswerForQuestion, getQuizWithQA } from "../../../../services/apiServices";
 import { toast } from "react-toastify";
 
-
 const QuizQA = (props) => {
-    const [seletedQuiz, setSeletedQuiz] = useState({});
+    const [selectedQuiz, setSelectedQuiz] = useState({});
     const intitQuestions = [
         {
             id: uuidv4(),
@@ -39,9 +38,12 @@ const QuizQA = (props) => {
         fetchListQuiz();
     }, [])
 
+    useEffect(() => {
+        fetchQuizQA();
+    }, [selectedQuiz]);
+
     const fetchListQuiz = async () => {
         let res = await getAllQuizForAdmin();
-        console.log('check res', res);
         if (res && res.EC === 0) {
             res.DT = res.DT.map(item => {
                 return ({
@@ -50,6 +52,32 @@ const QuizQA = (props) => {
                 })
             })
             setListQuiz(res.DT)
+        }
+    }
+
+    function urltoFile(url, filename, mimeType) {
+        return fetch(url)
+            .then(res => res.arrayBuffer())
+            .then(buf => new File([buf], filename, { type: mimeType }));
+    }
+
+    const fetchQuizQA = async () => {
+        if (selectedQuiz && selectedQuiz.value) {
+            let res = await getQuizWithQA(selectedQuiz.value);
+            if (res && res.EC === 0) {
+                console.log(res);
+                let newQA = [];
+                for (let i = 0; i < res.DT.qa.length; i++) {
+                    let question = res.DT.qa[i];
+                    if (question.imageFile) {
+                        question.imageName = `Question-${question.id}.png`;
+                        question.imageFile = await urltoFile(`data:image/png;base64, ${question.imageFile}`, `Question-${question.id}.png`, 'image/png')
+                    }
+                    newQA.push(question);
+                }
+                console.log(newQA);
+                setQuestions(newQA);
+            }
         }
     }
 
@@ -180,9 +208,8 @@ const QuizQA = (props) => {
             return;
         }
         //submit question
-        console.log('check question', questions);
         for (let question of questions) {
-            let questionCreated = await postCreateNewQuestionForQuiz(+seletedQuiz.value, question.description, question.imageFile);
+            let questionCreated = await postCreateNewQuestionForQuiz(+selectedQuiz.value, question.description, question.imageFile);
             //submit answer
             for (let answer of question.answers) {
                 await postCreateNewAnswerForQuestion(answer.description, answer.isCorrect, +questionCreated.DT.id);
@@ -198,8 +225,8 @@ const QuizQA = (props) => {
                 <div className='col-6 form-group'>
                     <label>Select Quiz:</label>
                     <Select
-                        defaultValue={seletedQuiz}
-                        onChange={setSeletedQuiz}
+                        defaultValue={selectedQuiz}
+                        onChange={setSelectedQuiz}
                         options={listQuiz}
                     />
                 </div>

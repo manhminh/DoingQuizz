@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { getAllQuizForAdmin, getAllUser } from "../../../../services/apiServices";
+import { getAllQuizForAdmin, getAllUser, postAssignQuiz } from "../../../../services/apiServices";
 import Select from 'react-select';
+import { toast } from "react-toastify";
 
 const AssignQuiz = (props) => {
     const [listQuiz, setListQuiz] = useState([]);
@@ -8,7 +9,7 @@ const AssignQuiz = (props) => {
 
     const [listUser, setListUser] = useState([]);
     const [seletedUser, setSeletedUser] = useState({});
-
+    console.log(seletedQuiz);
     useEffect(() => {
         fetchListQuiz();
         fetchListUser();
@@ -16,29 +17,37 @@ const AssignQuiz = (props) => {
 
     const fetchListQuiz = async () => {
         let res = await getAllQuizForAdmin();
-        console.log('check res', res);
         if (res && res.EC === 0) {
-            res.DT = res.DT.map(item => {
+            let quizzes = res.DT.map(item => {
                 return ({
                     value: item.id,
                     label: `${item.id} - ${item.name}`
                 })
             })
-            setListQuiz(res.DT)
+            setListQuiz(quizzes)
         }
     }
-
     const fetchListUser = async () => {
         let res = await getAllUser();
-        console.log('check res', res);
         if (res && res.EC === 0) {
-            res.DT = res.DT.map(user => {
+            let users = res.DT.map(user => {
                 return ({
                     value: user.id,
                     label: `${user.id} - ${user.username} - ${user.email}`
                 })
             })
-            setListUser(res.DT)
+            setListUser(users)
+        }
+    }
+
+    const handleAssign = async () => {
+        console.log(seletedQuiz, seletedUser);
+        let res = await postAssignQuiz(seletedQuiz.value, seletedUser.value);
+        console.log(res);
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+        } else {
+            toast.error(res.EM);
         }
     }
 
@@ -63,7 +72,12 @@ const AssignQuiz = (props) => {
             </div>
 
             <div>
-                <button className="btn btn-warning mt-3">Assign</button>
+                <button
+                    className="btn btn-warning mt-3"
+                    onClick={() => handleAssign()}
+                >
+                    Assign
+                </button>
             </div>
         </div>
     )
