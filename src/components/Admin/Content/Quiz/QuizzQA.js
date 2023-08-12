@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle, AiOutlineMinusSquare, AiOutlinePlusSquare } from "react-icons/ai";
 import { RiImageAddFill } from "react-icons/ri";
 import { v4 as uuidv4 } from 'uuid';
-import { getAllQuizForAdmin, postCreateNewQuestionForQuiz, postCreateNewAnswerForQuestion, getQuizWithQA } from "../../../../services/apiServices";
+import { getAllQuizForAdmin, getQuizWithQA, postUpsertQuiz } from "../../../../services/apiServices";
 import { toast } from "react-toastify";
 
 const QuizQA = (props) => {
@@ -39,19 +39,19 @@ const QuizQA = (props) => {
     }, [])
 
     useEffect(() => {
-        fetchQuizQA();
+        fetchQuizWithQA();
     }, [selectedQuiz]);
 
     const fetchListQuiz = async () => {
         let res = await getAllQuizForAdmin();
         if (res && res.EC === 0) {
-            res.DT = res.DT.map(item => {
+            let quizzes = res.DT.map(item => {
                 return ({
                     value: item.id,
                     label: `${item.id} - ${item.name}`
                 })
             })
-            setListQuiz(res.DT)
+            setListQuiz(quizzes)
         }
     }
 
@@ -61,7 +61,7 @@ const QuizQA = (props) => {
             .then(buf => new File([buf], filename, { type: mimeType }));
     }
 
-    const fetchQuizQA = async () => {
+    const fetchQuizWithQA = async () => {
         if (selectedQuiz && selectedQuiz.value) {
             let res = await getQuizWithQA(selectedQuiz.value);
             if (res && res.EC === 0) {
@@ -75,7 +75,6 @@ const QuizQA = (props) => {
                     }
                     newQA.push(question);
                 }
-                console.log(newQA);
                 setQuestions(newQA);
             }
         }
@@ -207,16 +206,33 @@ const QuizQA = (props) => {
             toast.error(`Not empty description for Question ${indexQ + 1}`);
             return;
         }
-        //submit question
-        for (let question of questions) {
-            let questionCreated = await postCreateNewQuestionForQuiz(+selectedQuiz.value, question.description, question.imageFile);
-            //submit answer
-            for (let answer of question.answers) {
-                await postCreateNewAnswerForQuestion(answer.description, answer.isCorrect, +questionCreated.DT.id);
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+        });
+
+
+        let questionsClone = _.cloneDeep(questions);
+        for (let i = 0; i < questionsClone.length; i++) {
+            if (questionsClone[i].imageFile) {
+                questionsClone[i].imageFile = await toBase64(questionsClone[i].imageFile);
             }
         }
-        toast.success(`Create Question and Answer success`);
-        setQuestions(intitQuestions);
+
+        console.log('questionsClone', questionsClone);
+        let res = await postUpsertQuiz({
+            quizId: selectedQuiz.value,
+            questions: questionsClone
+        })
+
+        console.log('>>>check res', res);
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+            fetchQuizWithQA()
+        }
     }
 
     return (

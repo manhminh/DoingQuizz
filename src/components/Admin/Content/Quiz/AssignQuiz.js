@@ -11,12 +11,16 @@ const AssignQuiz = (props) => {
     const [seletedUser, setSeletedUser] = useState({});
     console.log(seletedQuiz);
     useEffect(() => {
-        fetchListQuiz();
         fetchListUser();
     }, [])
 
+    useEffect(() => {
+        fetchListQuiz();
+    }, [props.listQuiz])
+
     const fetchListQuiz = async () => {
         let res = await getAllQuizForAdmin();
+        console.log('res', res);
         if (res && res.EC === 0) {
             let quizzes = res.DT.map(item => {
                 return ({
@@ -27,6 +31,7 @@ const AssignQuiz = (props) => {
             setListQuiz(quizzes)
         }
     }
+
     const fetchListUser = async () => {
         let res = await getAllUser();
         if (res && res.EC === 0) {
