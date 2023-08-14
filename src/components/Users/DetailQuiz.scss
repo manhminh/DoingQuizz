@@ -69,6 +69,16 @@
                 justify-content: center;
                 align-items: center;
                 cursor: pointer;
+
+                &:hover {
+                    color: red;
+                }
+                &.selected {
+                    background: #c6c6c6;
+                }
+                &.clicked {
+                    color: red;
+                }
             }
         }
     }
