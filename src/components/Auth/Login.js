@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userAction";
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import Languages from "../Header/Languages";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -37,7 +38,6 @@ const Login = () => {
         setIsLoading(true);
         //submit api
         let data = await postLogin(email, password);
-
         if (data && data.EC === 0) {
             dispatch(doLogin(data))
             toast.success(data.EM);
@@ -49,12 +49,18 @@ const Login = () => {
         }
     }
 
+    const handleOnKeyDown = (event) => {
+        if (event && event.key === 'Enter') {
+            hanldeLogin();
+        }
+    }
 
     return (
         <div className="login-container">
             <div className="header">
                 <span>Don't have an account yet?</span>
                 <button className="signUp-btn" onClick={() => navigate('/register')}>Sign up</button>
+                <Languages />
             </div>
 
             <div className="title col-4 mx-auto">
@@ -83,6 +89,7 @@ const Login = () => {
                         className="form-control"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => handleOnKeyDown(e)}
                     />
                 </div>
                 <span className="forgot-password">Forgot password?</span>

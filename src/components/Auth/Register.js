@@ -4,6 +4,7 @@ import "./Register.scss";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai"
 import { toast } from 'react-toastify';
 import { postRegister } from "../../services/apiServices";
+import Languages from "../Header/Languages";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -46,6 +47,7 @@ const Register = () => {
             <div className="header">
                 <span>Already have an account?</span>
                 <button className="logIn-btn" onClick={() => navigate('/login')}>Log in</button>
+                <Languages />
             </div>
 
             <div className="title col-4 mx-auto">

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import Layout from './Layout';
+import i18n from './utils/i18n';
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { BrowserRouter } from "react-router-dom";

@@ -22,6 +22,12 @@ body {
       z-index: 10;
       background-color: rgba(0,0,0, 0) !important;
 
+      .languages {
+        .dropdown-toggle::after {
+          display: none !important;
+        }
+      }
+
       .btn-login {
         height: 40px;
         margin-right: 16px;
@@ -58,7 +64,7 @@ body {
     flex-direction: column;
     gap: 20px;
     .title-1 {
-      font-size: 46px;
+      font-size: 44px;
       font-weight: 600;
     }
     .title-2 {
