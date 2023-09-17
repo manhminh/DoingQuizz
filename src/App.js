@@ -6,20 +6,17 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 const App = () => {
   return (
     <div className="app-container">
-      <div className='header-container'>
-        <Header />
-      </div>
-
-      <div className='main-container'>
-        <div className='sidenav-container'>
+      <PerfectScrollbar>
+        <div className='header-container'>
+          <Header />
         </div>
 
-        <div className='app-content'>
-          <PerfectScrollbar>
+        <div className='main-container'>
+          <div className='app-content'>
             <Outlet />
-          </PerfectScrollbar>
+          </div>
         </div>
-      </div>
+      </PerfectScrollbar>
     </div>
   );
 }

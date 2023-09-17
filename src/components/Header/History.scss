@@ -1,0 +1,39 @@
+.history-container {
+    .history-content {
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 10px;
+        }
+        .value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+
+    .detail-container {
+        margin-top: 20px;
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+
+        .detail-content {
+            box-shadow: 0 0 2px 1px rgba(0,0,0, 0.4);
+            border-radius: 10px;
+            width: calc(25% - 28px); 
+            display: flex;
+            flex-direction: column;
+            .child {
+                padding: 4px 2px;
+                &:first-child {
+                    text-align: center;
+                    border-bottom: 1px solid #aaa;
+                }
+                span {
+                    margin: 4px;
+                }
+            }
+        }
+    }
+}

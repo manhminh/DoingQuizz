@@ -1,10 +1,42 @@
 {
     "homepage": {
         "title1": "Có một cách tốt hơn để hỏi.",
-        "title2": "Bạn không muốn làm một bài kiểm tra nhàm chán. Và khán giả của bạn sẽ không trả lời một. Thay vào đó, hãy tạo một typeform—và làm cho mọi người hài lòng.",
+        "title2": "Bạn không muốn làm một bài kiểm tra nhàm chán. Và khách hàng của bạn sẽ không trả lời một. Thay vào đó, hãy tạo một typeform—và làm cho mọi người hài lòng.",
         "title3": {
-            "unLogin": "Get started. It's free",
-            "login": "Doing Quiz Now"
+            "unLogin": "Bắt đầu với chúng tôi",
+            "login": "Làm bài kiểm tra ngay"
         }
+    },
+    "header": {
+        "home": "Trang Chủ",
+        "users": "Người Dùng",
+        "admin": "Quản Trị",
+        "unlogin": {
+            "login": "Đăng Nhập",
+            "signup": "Đăng Kí"
+        },
+        "login": {
+            "setting": "Thiết Lập",
+            "profile": "Hồ Sơ",
+            "logout": "Đăng Xuất"
+        }
+    },
+    "login": {
+        "title1": "Bạn chưa có tài khoản?",
+        "signup": "Đăng Kí",
+        "title2": "Xin chào, Bạn là ai?",
+        "password": "Mật Khẩu",
+        "forgot-password": "Quên Mật Khẩu?",
+        "login-btn": "Đăng nhập Typeform",
+        "homepage": "Về trang chủ"
+    },
+    "register": {
+        "title1": "Bạn đã có tài khoản?",
+        "login": "Đăng nhập",
+        "title2": "Bắt đầu chuyến hành trình",
+        "username": "Tên Đăng Nhập",
+        "password": "Mật Khẩu",
+        "register-btn": "Đăng kí Typeform",
+        "homepage": "Về trang chủ"
     }
 }

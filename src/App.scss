@@ -17,8 +17,28 @@ body {
 
 .app-container {
   .header-container {
+    .navbar-brand {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 24px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      .brand-icon {
+        color: #0db4ec;
+        animation: spin 5s infinite linear;
+      }
+      @keyframes spin {
+        from {
+          transform: scale(1) rotate(0deg);
+        }
+
+        to {
+          transform: scale(1) rotate(360deg);
+        }
+      }
+    }
     .navbar {
-      padding-top: 25px;
+      padding-top: 20px;
       z-index: 10;
       background-color: rgba(0,0,0, 0) !important;
 
@@ -49,6 +69,7 @@ body {
         }
       }
       .nav-link {
+        font-size: 18px;
         &.active {
           color: #00bfff;
         }

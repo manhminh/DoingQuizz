@@ -6,5 +6,37 @@
             "unLogin": "Get started. It's free",
             "login": "Doing Quiz Now"
         }
+    },
+    "header": {
+        "home": "Home",
+        "users": "Users",
+        "admin": "Admin",
+        "unlogin": {
+            "login": "Log in",
+            "signup": "Sign up"
+        },
+        "login": {
+            "setting": "Setting",
+            "profile": "Profile",
+            "logout": "Log out"
+        }
+    },
+    "login": {
+        "title1": "Don't have an account yet?",
+        "signup": "Sign up",
+        "title2": "Hello, who's this?",
+        "password": "Password",
+        "forgot-password": "Forgot password?",
+        "login-btn": "Login to Typeform",
+        "homepage": "Go to Homepage"
+    },
+    "register": {
+        "title1": "Already have an account?",
+        "login": "Log in",
+        "title2": "Start your's journey",
+        "username": "Username",
+        "password": "Password",
+        "register-btn": "Register to Typeform",
+        "homepage": "Go to Homepage"
     }
 }
