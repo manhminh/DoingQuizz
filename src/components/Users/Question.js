@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { useState } from "react";
 import Lightbox from "react-awesome-lightbox";
+import { IoIosClose, IoIosCheckmark } from "react-icons/io";
 
 const Question = (props) => {
-    const { data, index } = props
+    const { data, index, isShowAnswer } = props
 
     const [isPreviewImage, setIsPreviewImage] = useState(false);
     if (_.isEmpty(data)) {
@@ -42,26 +43,39 @@ const Question = (props) => {
             </div>
             <div className="answer">
                 {data.answers && data.answers.length > 0 &&
-                    data.answers.map((a, index) => {
+                    data.answers.map((a, i) => {
                         return (
-                            <div key={`answer-${index}`} className="a-child">
+                            <div key={`answer-${i}`} className="a-child">
                                 <div className="form-check">
                                     <input
+                                        id={`checkbox-${i}-${index}`}
                                         className="form-check-input"
                                         type="checkbox"
+                                        disabled={props.isSubmitQuiz}
                                         checked={a.isSelected}
                                         onChange={(e) => handleHandleCheckbox(e, a.id, data.questionId)}
                                     />
-                                    <label className="form-check-label">
+                                    <label className="form-check-label" htmlFor={`checkbox-${i}-${index}`} >
                                         {a.description}
                                     </label>
+                                    {isShowAnswer === true &&
+                                        <>
+                                            {a.isSelected === true && a.isCorrect === false
+                                                && <IoIosClose className='incorrect' />
+                                            }
+
+                                            {a.isCorrect === true
+                                                && <IoIosCheckmark className='correct' />
+                                            }
+                                        </>
+                                    }
                                 </div>
                             </div>
                         )
                     })
                 }
 
-            </div>
+            </div >
         </>
     )
 }

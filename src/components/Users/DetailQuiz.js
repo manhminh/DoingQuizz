@@ -14,6 +14,10 @@ const DetailQuiz = (props) => {
     const quizId = param.id;
     const [dataQuiz, setDataQuiz] = useState([]);
     const [index, setIndex] = useState(0);
+
+    const [isSubmitQuiz, setIsSubmitQuiz] = useState(false);
+    const [isShowAnswer, setIsShowAnswer] = useState(false);
+
     const [isShowModalResult, setIsShowModalResult] = useState(false);
     const [dataModal, setDataModal] = useState({});
 
@@ -38,6 +42,7 @@ const DetailQuiz = (props) => {
                             image = item.image;
                         }
                         item.answers.isSelected = false;
+                        item.answers.isCorrect = false;
                         answers.push(item.answers);
                     })
                     _.orderBy(answers, ['id'], ['asc']);
@@ -78,7 +83,6 @@ const DetailQuiz = (props) => {
     }
 
     const handleFinishQuiz = async () => {
-        console.log('check data before submit', dataQuiz);
         const payload = {
             quizId: quizId,
             answers: []
@@ -103,20 +107,46 @@ const DetailQuiz = (props) => {
                 payload.answers = answers
             })
         }
-        console.log(payload);
         // submit api
         let res = await postSubmitQuiz(payload);
-        console.log('check res', res);
         if (res && res.EC === 0) {
+            setIsSubmitQuiz(true);
             setDataModal({
                 countCorrect: res.DT.countCorrect,
                 countTotal: res.DT.countTotal,
                 quizData: res.DT.quizData
             })
             setIsShowModalResult(true);
+
+            //update DataQuiz with correct answer
+            if (res.DT && res.DT.quizData) {
+                let dataQuizClone = _.cloneDeep(dataQuiz);
+                let a = res.DT.quizData;
+                for (let q of a) {
+                    for (let i = 0; i < dataQuizClone.length; i++) {
+                        if (+q.questionId === +dataQuizClone[i].questionId) {
+                            //update answer
+                            let newAnswers = [];
+                            for (let j = 0; j < dataQuizClone[i].answers.length; j++) {
+                                let s = q.systemAnswers.find(item => +item.id === +dataQuizClone[i].answers[j].id);
+                                if (s) {
+                                    dataQuizClone[i].answers[j].isCorrect = true;
+                                }
+                                newAnswers.push(dataQuizClone[i].answers[j]);
+                            }
+                            dataQuizClone[i].answers = newAnswers;
+                        }
+                    }
+                }
+                setDataQuiz(dataQuizClone);
+            }
         } else {
             alert('Something is wrong...')
         }
+    }
+    const handleShowAnswer = () => {
+        if (!isSubmitQuiz) return;
+        setIsShowAnswer(true);
     }
 
     return (
@@ -143,11 +173,12 @@ const DetailQuiz = (props) => {
                     </div>
                     <div className="q-content">
                         <Question
+                            isSubmitQuiz={isSubmitQuiz}
+                            isShowAnswer={isShowAnswer}
                             data={dataQuiz && dataQuiz.length > 0
                                 ? dataQuiz[index]
                                 : []
                             }
-
                             index={index}
                             handleCheckbox={handleCheckbox}
                         />
@@ -155,7 +186,7 @@ const DetailQuiz = (props) => {
                     <div className="footer">
                         <button className="btn btn-secondary" onClick={() => handlePrev()}>Prev</button>
                         <button className="btn btn-primary" onClick={() => handleNext()}>Next</button>
-                        <button className="btn btn-warning" onClick={() => handleFinishQuiz()}>Finish</button>
+                        <button className="btn btn-warning" disabled={isSubmitQuiz} onClick={() => handleFinishQuiz()}>Finish</button>
                     </div>
                 </div>
 
@@ -171,6 +202,7 @@ const DetailQuiz = (props) => {
                     show={isShowModalResult}
                     setShow={setIsShowModalResult}
                     dataModal={dataModal}
+                    handleShowAnswer={handleShowAnswer}
                 />
             </div>
         </>

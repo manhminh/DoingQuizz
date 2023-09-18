@@ -22,11 +22,15 @@ const ModalResult = (props) => {
                     <div>Correct Answer: <b>{dataModal.countCorrect}</b></div>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="primary" onClick={() => {
+                        handleClose();
+                        props.handleShowAnswer();
+                    }}>
+                        Show Answers
+                    </Button>
+
                     <Button variant="secondary" onClick={handleClose}>
                         Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Show Answers
                     </Button>
                 </Modal.Footer>
             </Modal >
